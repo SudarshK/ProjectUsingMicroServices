@@ -1,5 +1,6 @@
 ﻿using ServiceMesh.Services.Web.Models.DTO;
 using ServiceMesh.Web.Models;
+using ServiceMesh.Web.Models.DTO;
 using ServiceMesh.Web.Service.IService;
 using ServiceMesh.Web.Utility;
 
@@ -21,6 +22,16 @@ namespace ServiceMesh.Web.Service
                 ApiType = SD.ApiType.POST,
                 Data = cartDto,
                 Url = SD.OrderAPIBase + "/api/order/CreateOrder"
+            });
+        }
+
+        public async Task<ResponseDto?> CreateStripeSession(StripeRequestDto stripeRequestDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = stripeRequestDto,
+                Url = SD.OrderAPIBase + "/api/order/CreateStripeSession"
             });
         }
 

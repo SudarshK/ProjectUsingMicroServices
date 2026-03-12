@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Newtonsoft.Json;
 using ServiceMesh.Services.Web.Models.DTO;
 using ServiceMesh.Web.Models;
+using ServiceMesh.Web.Models.DTO;
 using ServiceMesh.Web.Service.IService;
 
 namespace ServiceMesh.Web.Controllers
@@ -46,9 +47,27 @@ namespace ServiceMesh.Web.Controllers
             if (response != null && response.IsSuccess)
             {
                 //get striped session and redirect to stripe
+                var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+                StripeRequestDto stripeRequestDto = new()
+                {
+                    ApprovedUrl = domain + "cart/Confirmation?orderid=" + orderHeaderDto.OrderHeaderId,
+                    CancelUrl = domain + "cart/Checkout",
+                    OrderHeader = orderHeaderDto
+                };
+                var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDto);
+                StripeRequestDto stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestDto>(Convert.ToString(stripeResponse.Result));
+                Response.Headers.Add("Location", stripeResponseResult.StripeSessionURL);
+                return new StatusCodeResult(303);
             }
             return View(cart);
         }
+
+        [Authorize]
+        public async Task<IActionResult> Confirmation(int orderId)
+        {
+            return View(orderId);
+        }
+
 
         public async Task<IActionResult> Remove(int cartDetailsId)
         {

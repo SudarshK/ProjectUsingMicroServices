@@ -1,18 +1,18 @@
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using ServiceMesh.Services.OrderAPI.Data;
-using ServiceMesh.Services.OrderAPI;
-using ServiceMesh.Services.OrderAPI.Utility;
 using ServiceMesh.MessageBus;
-using ServiceMesh.Services.OrderAPI.Service.IServices;
-using ServiceMesh.Services.OrderAPI.Service;
-using ServiceMesh.Services.OrderAPI.Extensions;
 using ServiceMesh.Services.OrderAPI;
+using ServiceMesh.Services.OrderAPI;
+using ServiceMesh.Services.OrderAPI.Data;
+using ServiceMesh.Services.OrderAPI.Extensions;
+using ServiceMesh.Services.OrderAPI.Service;
+using ServiceMesh.Services.OrderAPI.Service.IServices;
+using ServiceMesh.Services.OrderAPI.Utility;
+using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -73,6 +73,8 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty;
 });
 //}
+Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

@@ -12,6 +12,7 @@ namespace ServiceMesh.Services.EmailAPI.Messaging
         private readonly EmailService _emailService;
         private readonly string _serviceBusConnectionString;
         private readonly string _emailCartQueue;
+        private readonly string registerUserQueue;
         private readonly string orderCreated_Topic;
         private readonly string orderCreated_Email_Subscription;
 
@@ -25,6 +26,7 @@ namespace ServiceMesh.Services.EmailAPI.Messaging
             _configuration = configuration;
             _serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString");
             _emailCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue");
+            registerUserQueue = _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue");
             orderCreated_Topic = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
             orderCreated_Email_Subscription = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreated_Email_Subscription");
             // _subscriptionName = _configuration.GetValue<string>("AzureServiceBus:SubscriptionName");

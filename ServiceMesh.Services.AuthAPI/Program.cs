@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ServiceMesh.MessageBus;
 using ServiceMesh.Services.AuthAPI.Data;
 using ServiceMesh.Services.AuthAPI.Models;
+using ServiceMesh.Services.AuthAPI.RabbitMQSender;
 using ServiceMesh.Services.AuthAPI.Service;
 using ServiceMesh.Services.AuthAPI.Service.IService;
 
@@ -21,7 +22,8 @@ builder.Services.AddIdentity<ApplicationUser,IdentityRole>().AddEntityFrameworkS
 builder.Services.AddControllers();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-builder.Services.AddScoped<IMessageBus,MessageBus>();
+//builder.Services.AddScoped<IMessageBus,MessageBus>();
+builder.Services.AddScoped<IRabbitMQAuthMessageSender, RabbitMQAuthMessageSender>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

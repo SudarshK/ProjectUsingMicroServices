@@ -1,5 +1,6 @@
 ﻿using ServiceMesh.Services.Web.Models.DTO;
 using ServiceMesh.Web.Models;
+using ServiceMesh.Web.Models.DTO;
 
 namespace ServiceMesh.Web.Service.IService
 {
@@ -9,5 +10,6 @@ namespace ServiceMesh.Web.Service.IService
         Task<ResponseDto?>GetAllOrder(string? userId);
         Task<ResponseDto?>GetOrder(int orderId);
         Task<ResponseDto?>UpdateOrderStatus(int orderId, string newStatus);
+        Task<ResponseDto?> CreateStripeSession(StripeRequestDto stripeRequestDto);
     }
 }

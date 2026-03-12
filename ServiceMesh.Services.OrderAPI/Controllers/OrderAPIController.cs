@@ -4,12 +4,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ServiceMesh.MessageBus;
+using ServiceMesh.OrderAPI.Models.Dto;
 using ServiceMesh.Services.OrderAPI.Data;
 using ServiceMesh.Services.OrderAPI.Models;
 using ServiceMesh.Services.OrderAPI.Models.Dto;
 using ServiceMesh.Services.OrderAPI.Models.DTO;
 using ServiceMesh.Services.OrderAPI.Service.IServices;
 using ServiceMesh.Services.OrderAPI.Utility;
+using Stripe;
+using Stripe.Checkout;
 
 namespace ServiceMesh.Services.OrderAPI.Controllers
 {
@@ -91,15 +94,74 @@ namespace ServiceMesh.Services.OrderAPI.Controllers
                 OrderHeader orderCreated = _db.OrderHeaders.Add(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
                 await _db.SaveChangesAsync();
                 orderHeaderDto.OrderHeaderId = orderCreated.OrderHeaderId;
-                RewardsDto rewardsDto = new()
-                {
-                    OrderId = orderCreated.OrderHeaderId,
-                    RewardsActivity = Convert.ToInt32(orderHeaderDto.OrderTotal),
-                    UserId = orderHeaderDto.UserId
-                };
-                string topicName = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
-                await _messageBus.PublishMessage(rewardsDto, topicName);
+                //RewardsDto rewardsDto = new()
+                //{
+                //    OrderId = orderCreated.OrderHeaderId,
+                //    RewardsActivity = Convert.ToInt32(orderHeaderDto.OrderTotal),
+                //    UserId = orderHeaderDto.UserId
+                //};
+                //string topicName = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
+                //await _messageBus.PublishMessage(rewardsDto, topicName);
                 _response.Result = orderHeaderDto;
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
+
+        [Authorize]
+        [HttpPost("CreateStripeSession")]
+        public async Task<ResponseDto> CreateStripeSession([FromBody] StripeRequestDto stripeRequestDto)
+        {
+            try
+            {
+
+            var options = new Stripe.Checkout.SessionCreateOptions
+            {
+                SuccessUrl = stripeRequestDto.ApprovedUrl,
+                CancelUrl = stripeRequestDto.CancelUrl,
+                LineItems = new List<SessionLineItemOptions>(),
+                Mode = "payment",
+                
+            };
+                var DiscountsObj = new List<SessionDiscountOptions>()
+                {
+                    new SessionDiscountOptions
+                    {
+                        Coupon = stripeRequestDto.OrderHeader.CouponCode
+                    }
+                };
+                foreach (var item in stripeRequestDto.OrderHeader.OrderDetails)
+                {
+                    var sessionLineItem = new SessionLineItemOptions
+                    {
+                        PriceData = new SessionLineItemPriceDataOptions
+                        {
+                            UnitAmount = (long)(item.Price * 100),//20.99 -> 2099
+                            Currency = "usd",
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = item.Product.Name
+                            }
+                        },
+                        Quantity = item.Count
+                    };
+                    options.LineItems.Add(sessionLineItem);
+                }
+                if (stripeRequestDto.OrderHeader.Discount > 0)
+                {
+                    options.Discounts = DiscountsObj;
+                }
+            var service = new Stripe.Checkout.SessionService();
+            Stripe.Checkout.Session session = service.Create(options);
+                stripeRequestDto.StripeSessionURL=session.Url;
+                OrderHeader orderHeader = _db.OrderHeaders.First(u=> u.OrderHeaderId==stripeRequestDto.OrderHeader.OrderHeaderId);
+                orderHeader.StripedSessionId = session.Id;
+                _db.SaveChanges();
+                _response.Result = stripeRequestDto;
             }
             catch (Exception ex)
             {
