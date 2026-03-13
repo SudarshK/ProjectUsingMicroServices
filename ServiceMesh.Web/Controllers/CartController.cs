@@ -6,6 +6,7 @@ using ServiceMesh.Services.Web.Models.DTO;
 using ServiceMesh.Web.Models;
 using ServiceMesh.Web.Models.DTO;
 using ServiceMesh.Web.Service.IService;
+using ServiceMesh.Web.Utility;
 
 namespace ServiceMesh.Web.Controllers
 {
@@ -65,6 +66,16 @@ namespace ServiceMesh.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Confirmation(int orderId)
         {
+            ResponseDto? response = await _orderService.ValidateStripeSession(orderId);
+            if (response != null && response.IsSuccess)
+            {
+                OrderHeaderDto orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
+                if (orderHeaderDto.Status == SD.Status_Approved)
+                {
+                    return View(orderId);
+                }
+            }
+            //redirect to error page based on order status
             return View(orderId);
         }
 

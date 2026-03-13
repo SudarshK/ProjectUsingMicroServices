@@ -11,5 +11,6 @@ namespace ServiceMesh.Web.Service.IService
         Task<ResponseDto?>GetOrder(int orderId);
         Task<ResponseDto?>UpdateOrderStatus(int orderId, string newStatus);
         Task<ResponseDto?> CreateStripeSession(StripeRequestDto stripeRequestDto);
+        Task<ResponseDto?> ValidateStripeSession(int orderHeaderId);
     }
 }

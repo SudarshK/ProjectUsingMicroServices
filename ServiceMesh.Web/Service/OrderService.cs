@@ -62,5 +62,15 @@ namespace ServiceMesh.Web.Service
                 Url = SD.OrderAPIBase + "/api/order/UpdateOrderStatus/" + orderId
             });
         }
+
+        public async Task<ResponseDto?> ValidateStripeSession(int orderHeaderId)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = orderHeaderId,
+                Url = SD.OrderAPIBase + "/api/order/ValidateStripeSession"
+            });
+        }
     }
 }

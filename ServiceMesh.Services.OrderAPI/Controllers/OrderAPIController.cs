@@ -203,5 +203,33 @@ namespace ServiceMesh.Services.OrderAPI.Controllers
             }
             return _response;
         }
+        [Authorize]
+        [HttpPost("ValidateStripeSession")]
+        public async Task<ResponseDto> ValidateStripeSession([FromBody] int orderHeaderId)
+        {
+            try
+            {
+                OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == orderHeaderId);
+
+                var service = new Stripe.Checkout.SessionService();
+                Stripe.Checkout.Session session = service.Get(orderHeader.StripedSessionId);
+                var paymentIntentService = new PaymentIntentService();
+                PaymentIntent paymentIntent = new PaymentIntentService().Get(session.PaymentIntentId);
+                if(paymentIntent.Status == "succeeded")
+                {
+                    orderHeader.PaymentIntentId = paymentIntent.Id;
+                    orderHeader.Status = SD.Status_Approved;
+                    _db.SaveChanges();
+                    _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+            return _response;
+        }
     }
 }
