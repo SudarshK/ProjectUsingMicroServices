@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection.PortableExecutable;
 using ServiceMesh.Services.ShoppingCartAPI.Service.IServices;
 using ServiceMesh.MessageBus;
+using ServiceMesh.Services.ShoppingCartAPI.RabbitMQSender;
 namespace ServiceMesh.Services.ShoppingCartAPI.Controllers
 {
     [Route("api/cart")]
@@ -21,11 +22,11 @@ namespace ServiceMesh.Services.ShoppingCartAPI.Controllers
         private IMapper _mapper;
         private readonly IProductService _productService;
         private readonly ICouponService _couponService;
-        private readonly IMessageBus _messageBus;
+        private readonly IRabbitMQCartMessageSender _messageBus;
         private readonly IConfiguration _configuration;
 
         public CartAPIController(AppDbContext db, 
-            IMapper mapper,IProductService productService, ICouponService couponService, IMessageBus messageBus,IConfiguration configuration)
+            IMapper mapper,IProductService productService, ICouponService couponService, IRabbitMQCartMessageSender messageBus,IConfiguration configuration)
         {
             _db = db;
             _response = new ResponseDto();
@@ -99,7 +100,7 @@ namespace ServiceMesh.Services.ShoppingCartAPI.Controllers
         {
             try
             {
-                await _messageBus.PublishMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue"));
+                _messageBus.SendMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue"));
                 _response.Result = true;
             }
             catch (Exception ex)

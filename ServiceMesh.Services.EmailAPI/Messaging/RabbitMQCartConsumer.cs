@@ -2,19 +2,20 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
+using ServiceMesh.Services.EmailAPI.Model.DTO;
 using ServiceMesh.Services.EmailAPI.Services;
 using System.Threading.Channels;
 
 namespace ServiceMesh.Services.EmailAPI.Messaging
 {
-    public class RabbitMQAuthConsumer : BackgroundService
+    public class RabbitMQCartConsumer : BackgroundService
     {
         private readonly IConfiguration _configuration;
         private readonly EmailService _emailService;
         private IConnection _connection;
         private RabbitMQ.Client.IModel _channel;
 
-        public RabbitMQAuthConsumer(IConfiguration configuration, EmailService emailService)
+        public RabbitMQCartConsumer(IConfiguration configuration, EmailService emailService)
         {
             _configuration = configuration;
             _emailService = emailService;
@@ -26,7 +27,7 @@ namespace ServiceMesh.Services.EmailAPI.Messaging
             };
             _connection = factory.CreateConnection();
             _channel = _connection.CreateModel();
-            _channel.QueueDeclare(_configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue"), false, false, false, null);
+            _channel.QueueDeclare(_configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue"), false, false, false, null);
         }
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -35,16 +36,16 @@ namespace ServiceMesh.Services.EmailAPI.Messaging
             consumer.Received += (ch, ea) =>
             {
                 var content = System.Text.Encoding.UTF8.GetString(ea.Body.ToArray());
-                string email = JsonConvert.DeserializeObject<string>(content);
-                HandleMessage(email).GetAwaiter().GetResult();
+                CartDto cartDto = JsonConvert.DeserializeObject<CartDto>(content);
+                HandleMessage(cartDto).GetAwaiter().GetResult();
                 _channel.BasicAck(ea.DeliveryTag, false);
             };
-            _channel.BasicConsume(_configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue"), false, consumer);
+            _channel.BasicConsume(_configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue"), false, consumer);
             return Task.CompletedTask;
         }
-        private async Task HandleMessage(string email)
+        private async Task HandleMessage(CartDto cartDto)
         {
-            _emailService.RegisterUserEmailAndLog(email).GetAwaiter().GetResult();
+            _emailService.EmailCartAndLog(cartDto).GetAwaiter().GetResult();
         }
     }
 }

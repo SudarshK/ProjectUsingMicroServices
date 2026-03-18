@@ -37,6 +37,12 @@ namespace ServiceMesh.Services.EmailAPI.Services
             string message = "New Order Placed <br/> Order ID : "+ rewardsDto.OrderId;
             await LogAndEmail(message, "sk@gmail.com");
         }
+        
+        public async Task RegisterUserEmailAndLog(string email)
+        {
+            string message = "User Registeration Successful. <br/> Email : " + email;
+            await LogAndEmail(message, "sk@gmail.com");
+        }
 
         private async Task<bool> LogAndEmail(string message, string mail)
         {

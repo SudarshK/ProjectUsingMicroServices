@@ -69,6 +69,7 @@ namespace ServiceMesh.Web.Controllers
             ResponseDto? response = await _orderService.ValidateStripeSession(orderId);
             if (response != null && response.IsSuccess)
             {
+                CartDetailsDto cartDetailsDto = new();
                 OrderHeaderDto orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
                 if (orderHeaderDto.Status == SD.Status_Approved)
                 {

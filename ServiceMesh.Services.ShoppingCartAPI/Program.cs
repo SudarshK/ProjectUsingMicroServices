@@ -12,6 +12,7 @@ using ServiceMesh.Services.ShoppingCartAPI.Service.IServices;
 using ServiceMesh.Services.ShoppingCartAPI.Service;
 using ServiceMesh.Services.ShoppingCartAPI.Utility;
 using ServiceMesh.MessageBus;
+using ServiceMesh.Services.ShoppingCartAPI.RabbitMQSender;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -28,7 +29,7 @@ new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddScoped<ICouponService, CouponService>();
-builder.Services.AddScoped<IMessageBus, MessageBus>();
+builder.Services.AddScoped<IRabbitMQCartMessageSender, RabbitMQCartMessageSender>();
 builder.Services.AddHttpClient("Coupon", u => u.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:CouponAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddControllers();

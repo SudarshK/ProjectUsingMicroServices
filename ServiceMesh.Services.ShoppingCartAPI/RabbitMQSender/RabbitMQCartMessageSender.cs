@@ -4,16 +4,16 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using System.Text;
 
-namespace ServiceMesh.Services.AuthAPI.RabbitMQSender
+namespace ServiceMesh.Services.ShoppingCartAPI.RabbitMQSender
 {
-    public class RabbitMQAuthMessageSender : IRabbitMQAuthMessageSender
+    public class RabbitMQCartMessageSender : IRabbitMQCartMessageSender
     {
         private readonly string _hostname;
         private readonly string _username;
         private readonly string _password;
         private IConnection _connection;
 
-        public RabbitMQAuthMessageSender()
+        public RabbitMQCartMessageSender()
         {
             _hostname = "localhost";
             _username = "guest";

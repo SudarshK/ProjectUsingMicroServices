@@ -1,0 +1,226 @@
+{
+  //"ProductAPI": "https://localhost:7000",
+  //"CouponAPI": "https://localhost:7001",
+  //"AuthAPI": "https://localhost:7002",
+  //"ShoppingCartAPI": "https://localhost:7003",
+  //"OrderAPI": "https://localhost:7004",
+  "Routes": [
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/api/product",
+      "DownstreamPathTemplate": "/api/product",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicesproductapi-ftfwgkccfsc7eed7.centralindia-01.azurewebsites.net"
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get", "DELETE" ],
+      "UpstreamPathTemplate": "/api/product/{id}",
+      "DownstreamPathTemplate": "/api/product/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicesproductapi-ftfwgkccfsc7eed7.centralindia-01.azurewebsites.net"
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "POST", "PUT" ],
+      "UpstreamPathTemplate": "/api/product",
+      "DownstreamPathTemplate": "/api/product",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicesproductapi-ftfwgkccfsc7eed7.centralindia-01.azurewebsites.net"
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    //Coupon API
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/api/coupon",
+      "DownstreamPathTemplate": "/api/coupon",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicescouponapi-f7ffexccbjdrfkhw.centralindia-01.azurewebsites.net"
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/api/coupon/GetByCode/{couponCode}",
+      "DownstreamPathTemplate": "/api/coupon/GetByCode/{couponCode}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicescouponapi-f7ffexccbjdrfkhw.centralindia-01.azurewebsites.net"
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get", "DELETE" ],
+      "UpstreamPathTemplate": "/api/coupon/{id}",
+      "DownstreamPathTemplate": "/api/coupon/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicescouponapi-f7ffexccbjdrfkhw.centralindia-01.azurewebsites.net"
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "POST", "PUT" ],
+      "UpstreamPathTemplate": "/api/coupon",
+      "DownstreamPathTemplate": "/api/coupon",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicescouponapi-f7ffexccbjdrfkhw.centralindia-01.azurewebsites.net"
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    //ShoppingCart
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/api/cart/GetCart/{userId}",
+      "DownstreamPathTemplate": "/api/cart/GetCart/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicesshoppingcartapi-bgecakarfchge7f8.centralindia-01.azurewebsites.net"
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/api/cart/RemoveCart",
+      "DownstreamPathTemplate": "/api/cart/RemoveCart",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicesshoppingcartapi-bgecakarfchge7f8.centralindia-01.azurewebsites.net"
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/api/cart/CartUpsert",
+      "DownstreamPathTemplate": "/api/cart/CartUpsert",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicesshoppingcartapi-bgecakarfchge7f8.centralindia-01.azurewebsites.net"
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/api/cart/EmailCartRequest",
+      "DownstreamPathTemplate": "/api/cart/EmailCartRequest",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicesshoppingcartapi-bgecakarfchge7f8.centralindia-01.azurewebsites.net"
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/api/cart/ApplyCoupon",
+      "DownstreamPathTemplate": "/api/cart/ApplyCoupon",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicesshoppingcartapi-bgecakarfchge7f8.centralindia-01.azurewebsites.net"
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    //OrdersAPI // Add CreateStripeSession and other related endpoints later
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/api/order/GetOrders/",
+      "DownstreamPathTemplate": "/api/order/GetOrders/",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicesorderapi-fbejdnfyd0a3b0ar.centralindia-01.azurewebsites.net"
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "Get" ],
+      "UpstreamPathTemplate": "/api/order/GetOrder/{orderId}",
+      "DownstreamPathTemplate": "/api/order/GetOrder/{orderId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicesorderapi-fbejdnfyd0a3b0ar.centralindia-01.azurewebsites.net"
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/api/order/CreateOrder",
+      "DownstreamPathTemplate": "/api/order/CreateOrder",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicesorderapi-fbejdnfyd0a3b0ar.centralindia-01.azurewebsites.net"
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+    {
+      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamPathTemplate": "/api/order/UpdateOrderStatus/{id}",
+      "DownstreamPathTemplate": "/api/order/UpdateOrderStatus/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "servicemeshservicesorderapi-fbejdnfyd0a3b0ar.centralindia-01.azurewebsites.net"
+
+        }
+      ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    }
+
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://servicemeshgateway-e9c3dngsbhabata9.centralindia-01.azurewebsites.net/"
+  }
+}

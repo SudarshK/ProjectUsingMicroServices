@@ -17,13 +17,6 @@ namespace ServiceMesh.Services.AuthAPI.Controllers
         private readonly IConfiguration _configuration;
         protected ResponseDto _response;
 
-        //public AuthApiController(IAuthService authService,IMessageBus messageBus, IConfiguration configuration)
-        //{
-        //    _authService = authService;
-        //    _messageBus = messageBus;
-        //    _configuration = configuration;
-        //    _response = new();
-        //}
         public AuthApiController(IAuthService authService,IRabbitMQAuthMessageSender messageBus, IConfiguration configuration)
         {
             _authService = authService;
@@ -31,8 +24,6 @@ namespace ServiceMesh.Services.AuthAPI.Controllers
             _configuration = configuration;
             _response = new();
         }
-
-
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegistrationRequestDto model)

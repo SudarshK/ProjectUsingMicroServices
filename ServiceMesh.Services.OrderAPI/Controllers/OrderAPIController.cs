@@ -183,15 +183,14 @@ namespace ServiceMesh.Services.OrderAPI.Controllers
                     if (newStatus == SD.Status_Cancelled)
                     {
                         //We will give refund
-                        //var options = new RefundCreateOptions
-                        //{
-                        //    Reason = RefundReasons.RequestedByCustomer,
-                        //    PaymentIntent = orderHeader.PaymentIntentId
-                        //}
+                        var options = new RefundCreateOptions
+                        {
+                            Reason = RefundReasons.RequestedByCustomer,
+                            PaymentIntent = orderHeader.PaymentIntentId
+                        };
                         Console.WriteLine("Refund Started");
-                        //var service = new RefundService();
-                        //Refund refund = service.Create(options);
-                        //orderHeader.Status = newStatus;
+                        var service = new RefundService();
+                        Refund refund = service.Create(options);
                     }
                     orderHeader.Status = newStatus;
                     _db.SaveChanges();
