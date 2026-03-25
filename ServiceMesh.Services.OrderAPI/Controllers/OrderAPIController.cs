@@ -9,6 +9,7 @@ using ServiceMesh.Services.OrderAPI.Data;
 using ServiceMesh.Services.OrderAPI.Models;
 using ServiceMesh.Services.OrderAPI.Models.Dto;
 using ServiceMesh.Services.OrderAPI.Models.DTO;
+using ServiceMesh.Services.OrderAPI.RabbitMQSender;
 using ServiceMesh.Services.OrderAPI.Service.IServices;
 using ServiceMesh.Services.OrderAPI.Utility;
 using Stripe;
@@ -24,10 +25,10 @@ namespace ServiceMesh.Services.OrderAPI.Controllers
         private readonly AppDbContext _db;
         private readonly IProductService _productService;
         private readonly IMapper _mapper;
-        private readonly IMessageBus _messageBus;
+        private readonly IRabbitMQOrderMessageSender _messageBus;
         private readonly IConfiguration _configuration;
 
-        public OrderAPIController(AppDbContext db,IProductService productService,IMapper mapper, IMessageBus messageBus,IConfiguration configuration)
+        public OrderAPIController(AppDbContext db,IProductService productService,IMapper mapper, IRabbitMQOrderMessageSender messageBus,IConfiguration configuration)
         {
             _db = db;
             this._response = new ResponseDto();
@@ -219,6 +220,14 @@ namespace ServiceMesh.Services.OrderAPI.Controllers
                     orderHeader.PaymentIntentId = paymentIntent.Id;
                     orderHeader.Status = SD.Status_Approved;
                     _db.SaveChanges();
+                    RewardsDto rewardsDto = new()
+                    {
+                        OrderId = orderHeader.OrderHeaderId,
+                        RewardsActivity = Convert.ToInt32(orderHeader.OrderTotal),
+                        UserId = orderHeader.UserId
+                    };
+                    string topicName = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
+                    _messageBus.SendMessage(rewardsDto, topicName);
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
                 }
                

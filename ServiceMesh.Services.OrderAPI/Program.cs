@@ -9,6 +9,7 @@ using ServiceMesh.Services.OrderAPI;
 using ServiceMesh.Services.OrderAPI;
 using ServiceMesh.Services.OrderAPI.Data;
 using ServiceMesh.Services.OrderAPI.Extensions;
+using ServiceMesh.Services.OrderAPI.RabbitMQSender;
 using ServiceMesh.Services.OrderAPI.Service;
 using ServiceMesh.Services.OrderAPI.Service.IServices;
 using ServiceMesh.Services.OrderAPI.Utility;
@@ -26,7 +27,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
-builder.Services.AddScoped<IMessageBus, MessageBus>();
+builder.Services.AddScoped<IRabbitMQOrderMessageSender, RabbitMQOrderMessageSender>();
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddControllers();
