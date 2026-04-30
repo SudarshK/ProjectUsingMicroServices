@@ -19,7 +19,7 @@ builder.Services.AddSingleton(new RewardService(optionsBuilder.Options));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
+//builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -44,7 +44,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 ApplyMigration();
-app.UseAzureServiceBusConsumer(); 
+//app.UseAzureServiceBusConsumer(); 
 app.Run();
 
 void ApplyMigration()

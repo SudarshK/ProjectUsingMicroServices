@@ -25,6 +25,13 @@ namespace ServiceMesh.Services.EmailAPI.Messaging
             _emailService = emailService;
             _configuration = configuration;
             _serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString");
+            if (string.IsNullOrWhiteSpace(_serviceBusConnectionString) ||
+                _serviceBusConnectionString.StartsWith("replace-with-", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    "EmailAPI Service Bus configuration is missing. Set SERVICEMESH_EMAILAPI__ServiceBusConnectionString to a valid Azure Service Bus connection string.");
+            }
+
             _emailCartQueue = _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue");
             registerUserQueue = _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue");
             orderCreated_Topic = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");

@@ -19,6 +19,13 @@ namespace ServiceMesh.Services.RewardAPI.Messaging
             _rewardService = rewardService;
             _configuration = configuration;
             _serviceBusConnectionString = _configuration.GetValue<string>("ServiceBusConnectionString");
+            if (string.IsNullOrWhiteSpace(_serviceBusConnectionString) ||
+                _serviceBusConnectionString.StartsWith("replace-with-", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException(
+                    "RewardAPI Service Bus configuration is missing. Set SERVICEMESH_REWARDAPI__ServiceBusConnectionString to a valid Azure Service Bus connection string.");
+            }
+
             orderCreatedTopic = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreatedTopic");
             orderCreatedRewardSubscription = _configuration.GetValue<string>("TopicAndQueueNames:OrderCreated_Rewards_Subscription");
             var client = new ServiceBusClient(_serviceBusConnectionString);
