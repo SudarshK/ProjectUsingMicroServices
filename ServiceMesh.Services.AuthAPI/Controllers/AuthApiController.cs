@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ServiceMesh.MessageBus;
 using ServiceMesh.Services.AuthAPI.Models.DTO;
 using ServiceMesh.Services.AuthAPI.RabbitMQSender;
 using ServiceMesh.Services.AuthAPI.Service.IService;

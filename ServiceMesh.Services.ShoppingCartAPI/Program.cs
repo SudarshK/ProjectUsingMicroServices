@@ -14,6 +14,7 @@ using ServiceMesh.Services.ShoppingCartAPI.Utility;
 using ServiceMesh.MessageBus;
 using ServiceMesh.Services.ShoppingCartAPI.RabbitMQSender;
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables(prefix: "SERVICEMESH_SHOPPINGCARTAPI__");
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>

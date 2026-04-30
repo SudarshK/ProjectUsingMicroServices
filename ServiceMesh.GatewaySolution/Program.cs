@@ -3,6 +3,7 @@ using Ocelot.Middleware;
 using ServiceMesh.Services.GatewaySolutions.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables(prefix: "SERVICEMESH_GATEWAY__");
 builder.AddAppAuthentication();
 if(builder.Environment.EnvironmentName.ToString().ToLower().Equals("production"))
 {

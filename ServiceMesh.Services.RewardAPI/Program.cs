@@ -5,6 +5,7 @@ using ServiceMesh.Services.RewardAPI.Messaging;
 using ServiceMesh.Services.RewardAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables(prefix: "SERVICEMESH_REWARDAPI__");
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>

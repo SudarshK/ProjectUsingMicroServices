@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ServiceMesh.Services.CouponAPI.Extensions;
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables(prefix: "SERVICEMESH_COUPONAPI__");
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>

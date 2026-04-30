@@ -15,6 +15,7 @@ using ServiceMesh.Services.OrderAPI.Service.IServices;
 using ServiceMesh.Services.OrderAPI.Utility;
 using System.Text;
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables(prefix: "SERVICEMESH_ORDERAPI__");
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>

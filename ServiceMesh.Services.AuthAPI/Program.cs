@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ServiceMesh.MessageBus;
 using ServiceMesh.Services.AuthAPI.Data;
 using ServiceMesh.Services.AuthAPI.Models;
 using ServiceMesh.Services.AuthAPI.RabbitMQSender;
@@ -8,6 +7,7 @@ using ServiceMesh.Services.AuthAPI.Service;
 using ServiceMesh.Services.AuthAPI.Service.IService;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables(prefix: "SERVICEMESH_AUTHAPI__");
 
 // Add services to the container.
 

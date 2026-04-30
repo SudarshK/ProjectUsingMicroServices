@@ -5,6 +5,7 @@ using ServiceMesh.Services.EmailAPI.Messaging;
 using ServiceMesh.Services.EmailAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables(prefix: "SERVICEMESH_EMAILAPI__");
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>
@@ -18,7 +19,7 @@ builder.Services.AddSingleton(new EmailService(optionsBuilder.Options));
 builder.Services.AddHostedService<RabbitMQAuthConsumer>();
 builder.Services.AddHostedService<RabbitMQCartConsumer>();
 builder.Services.AddHostedService<RabbitMQOrderConsumer>();
-builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
+//builder.Services.AddSingleton<IAzureServiceBusConsumer, AzureServiceBusConsumer>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -44,7 +45,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 ApplyMigration();
-app.UseAzureServiceBusConsumer();
+//app.UseAzureServiceBusConsumer();
 app.Run();
 void ApplyMigration()
 {

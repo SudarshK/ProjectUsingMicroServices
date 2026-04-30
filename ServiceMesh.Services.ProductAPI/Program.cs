@@ -9,6 +9,7 @@ using ServiceMesh.Services.ProductAPI.Data;
 using ServiceMesh.Services.ProductAPI;
 using ServiceMesh.Services.ProductAPI.Extensions;
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables(prefix: "SERVICEMESH_PRODUCTAPI__");
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>

@@ -1,12 +1,25 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Localization;
 using ServiceMesh.Web.Service;
 using ServiceMesh.Web.Service.IService;
 using ServiceMesh.Web.Utility;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables(prefix: "SERVICEMESH_WEB__");
+var indianCulture = new CultureInfo("en-IN");
+
+CultureInfo.DefaultThreadCurrentCulture = indianCulture;
+CultureInfo.DefaultThreadCurrentUICulture = indianCulture;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture(indianCulture);
+    options.SupportedCultures = new[] { indianCulture };
+    options.SupportedUICultures = new[] { indianCulture };
+});
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<IProductService,ProductService>();
@@ -46,6 +59,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+app.UseRequestLocalization();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
